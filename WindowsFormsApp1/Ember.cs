@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+//using Newtonsoft.Json.Converters;
+//using Newtonsoft.Json;
 
 namespace WindowsFormsApp1
 {
-    internal class Elem
+    public partial class Ember
     {
         [JsonPropertyName("id")]
         public int id { get; set; }
@@ -28,6 +32,15 @@ namespace WindowsFormsApp1
         public string Kiiratas
         {
             get { return $"{name}"; }
+        }
+        public string ToJson()
+        {
+            return JsonSerializer.Serialize(this);
+        }
+
+        public static Ember[] FromJson(string json)
+        {
+            return JsonSerializer.Deserialize<Ember[]>(json);
         }
     }
 }

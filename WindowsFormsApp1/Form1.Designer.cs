@@ -50,9 +50,11 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(202, 290);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged_1);
             // 
             // textBox_id
             // 
+            this.textBox_id.Enabled = false;
             this.textBox_id.Location = new System.Drawing.Point(230, 13);
             this.textBox_id.Name = "textBox_id";
             this.textBox_id.Size = new System.Drawing.Size(100, 20);

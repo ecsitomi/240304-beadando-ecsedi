@@ -39,14 +39,15 @@ namespace WindowsFormsApp1
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonValasz = await response.Content.ReadAsStringAsync();
-                    var elemek = System.Text.Json.JsonSerializer.Deserialize<List<Elem>>(jsonValasz);
+                    //var elemek = System.Text.Json.JsonSerializer.Deserialize<List<Elem>>(jsonValasz);
+                    var elemek = Ember.FromJson(jsonValasz);
 
-                    listBox1.DataSource = elemek;
-                    foreach (Elem elem in elemek)
+                    //listBox1.DataSource = elemek;
+                    foreach (Ember elem in elemek)
                     {
                         listBox1.Items.Add(elem);
                     }
-                    listBox1.DisplayMember = "Kiiratas";
+                    //listBox1.DisplayMember = "Kiiratas";
 
                 }
             }
@@ -57,21 +58,24 @@ namespace WindowsFormsApp1
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Elem elem = (Elem)listBox1.SelectedItem;
-            textBox_id.Text = elem.id.ToString();
-            textBox_nev.Text = elem.name;
-            textBox_fizetes.Text = elem.salary.ToString();
-            textBox_pozicio.Text = elem.position;
+            if (listBox1.SelectedItem != null)
+            {
+                Ember elem = (Ember) listBox1.SelectedItem;
+                textBox_id.Text = elem.id.ToString();
+                textBox_nev.Text = elem.name.ToString();
+                textBox_fizetes.Text = elem.salary.ToString();
+                textBox_pozicio.Text = elem.position.ToString();
+            }
         }
 
-        private async void button_frissit_Click(object sender, EventArgs e)
+        private void button_frissit_Click(object sender, EventArgs e)
         {
             Form1_Load(sender,e);
         }
 
         private async void button_uj_Click(object sender, EventArgs e)
         {
-            Elem elem = new Elem();
+            Ember elem = new Ember();
             elem.name = textBox_nev.Text;
             elem.salary = int.Parse(textBox_fizetes.Text);
             elem.position = textBox_pozicio.Text;
@@ -91,9 +95,11 @@ namespace WindowsFormsApp1
             }
         }
 
+        
+
         private async void button_modosit_Click(object sender, EventArgs e)
         {
-            Elem elem = (Elem)listBox1.SelectedItem;
+            Ember elem = (Ember)listBox1.SelectedItem;
             elem.id = int.Parse((textBox_id.Text));
             elem.name = textBox_nev.Text;
             elem.salary = int.Parse(textBox_fizetes.Text);
@@ -109,8 +115,21 @@ namespace WindowsFormsApp1
 
         private void button_torol_Click(object sender, EventArgs e)
         {
-            Elem elem = (Elem)listBox1.SelectedItem;
-            var response = client.DeleteAsync(apiUrl + "/" + elem.id).Result;
+            Ember elem = (Ember)listBox1.SelectedItem;
+            var response = client.DeleteAsync(apiUrl + "/" + elem.id).Result; 
+            if (response.IsSuccessStatusCode)
+            {
+                Form1_Load(sender, e);
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            Ember elem = (Ember)listBox1.SelectedItem;
+            textBox_id.Text = elem.id.ToString();
+            textBox_nev.Text = elem.name.ToString();
+            textBox_fizetes.Text = elem.salary.ToString();
+            textBox_pozicio.Text = elem.position.ToString();
         }
     }
 }
