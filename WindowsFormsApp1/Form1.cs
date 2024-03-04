@@ -47,7 +47,7 @@ namespace WindowsFormsApp1
                     {
                         listBox1.Items.Add(elem);
                     }
-                    //listBox1.DisplayMember = "Kiiratas";
+                    listBox1.DisplayMember = "Kiiratas";
 
                 }
             }
@@ -75,23 +75,30 @@ namespace WindowsFormsApp1
 
         private async void button_uj_Click(object sender, EventArgs e)
         {
-            Ember elem = new Ember();
-            elem.name = textBox_nev.Text;
-            elem.salary = int.Parse(textBox_fizetes.Text);
-            elem.position = textBox_pozicio.Text;
-
-            //itt kértem segítséget a chatgpt-től
-            var options = new JsonSerializerOptions
+            try
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
 
-            var json = System.Text.Json.JsonSerializer.Serialize(elem);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(apiUrl, data);
-            if (response.IsSuccessStatusCode)
+                Ember elem = new Ember();
+                elem.name = textBox_nev.Text;
+                elem.salary = int.Parse(textBox_fizetes.Text);
+                elem.position = textBox_pozicio.Text;
+
+                //itt kértem segítséget a chatgpt-től
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                };
+
+                var json = System.Text.Json.JsonSerializer.Serialize(elem);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(apiUrl, data);
+                if (response.IsSuccessStatusCode)
+                {
+                    Form1_Load(sender, e);
+                }
+            } catch (Exception ex)
             {
-                Form1_Load(sender, e);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -99,17 +106,25 @@ namespace WindowsFormsApp1
 
         private async void button_modosit_Click(object sender, EventArgs e)
         {
-            Ember elem = (Ember)listBox1.SelectedItem;
-            elem.id = int.Parse((textBox_id.Text));
-            elem.name = textBox_nev.Text;
-            elem.salary = int.Parse(textBox_fizetes.Text);
-            elem.position = textBox_pozicio.Text;
-            var json = JsonConvert.SerializeObject(elem);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync(apiUrl + "/" + elem.id, data);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Form1_Load(sender, e);
+
+                Ember elem = (Ember)listBox1.SelectedItem;
+                elem.id = int.Parse((textBox_id.Text));
+                elem.name = textBox_nev.Text;
+                elem.salary = int.Parse(textBox_fizetes.Text);
+                elem.position = textBox_pozicio.Text;
+                var json = JsonConvert.SerializeObject(elem);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PutAsync(apiUrl + "/" + elem.id, data);
+                if (response.IsSuccessStatusCode)
+                {
+                    Form1_Load(sender, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
